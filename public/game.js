@@ -676,7 +676,7 @@ class Game {
     front.position.set(112, 100, 600);
     front.parent = this.player.object;
     const back = new THREE.Object3D();
-    back.position.set(0, 1300, -1150);
+    back.position.set(0, 1100, -1850);
     back.parent = this.player.object;
     const chat = new THREE.Object3D();
     chat.position.set(0, 200, -450);
