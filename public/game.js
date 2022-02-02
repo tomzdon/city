@@ -199,6 +199,7 @@ class Game {
     };
 
     this.anims.forEach(function (anim) {
+      console.log(anim);
       options.assets.push(`${game.assetsPath}fbx/anims/${anim}.fbx`);
     });
     options.assets.push(`${game.assetsPath}fbx/town.fbx`);
@@ -289,10 +290,11 @@ class Game {
     const loader = new THREE.FBXLoader();
     const loaderGLTF = new THREE.GLTFLoader();
     const game = this;
-
     this.player = new PlayerLocal(this);
-    cluster.forEach((cls) => game.loadCluster(cls));
-    game.loadCars({ x: 1, z: 0, cluster: "cars" });
+    setTimeout(() => {
+      cluster.forEach((cls) => game.loadCluster(cls));
+      game.loadCars({ x: 1, z: 0, cluster: "cars" });
+    }, 2000);
 
     this.speechBubble = new SpeechBubble(this, "", 150);
     this.speechBubble.mesh.position.set(0, 350, 0);
@@ -443,8 +445,9 @@ class Game {
       ]);
 
       game.scene.background = textureCube;
-
-      game.loadNextAnim();
+      if (game.anims.length > 0) {
+        game.loadNextAnim();
+      }
     });
   }
   loadCubeStadium(gltf, game) {
@@ -622,7 +625,6 @@ class Game {
       this.viewSmallMap = true;
     }
   }
-  F;
 
   loadNextAnim() {
     const loader = new THREE.FBXLoader();
@@ -980,26 +982,11 @@ class Player {
     this.local = true;
     let model, colour;
 
-    const colours = ["Black", "Brown", "White"];
+    const colours = ["Black1", "Brown1", "White1"];
     colour = colours[Math.floor(Math.random() * colours.length)];
 
     if (options === undefined) {
-      const people = [
-        "BeachBabe",
-        "BusinessMan",
-        "Doctor",
-        "FireFighter",
-        "Housewife",
-        "Policeman",
-        "Prostitute",
-        "Punk",
-        "RiotCop",
-        "Roadworker",
-        "Robber",
-        "Sheriff",
-        "Streetman",
-        "Waitress",
-      ];
+      const people = ["BeachBabe"];
       model = people[Math.floor(Math.random() * people.length)];
     } else if (typeof options == "object") {
       this.local = false;
@@ -1016,6 +1003,7 @@ class Player {
     this.animations = this.game.animations;
 
     const loader = new THREE.FBXLoader();
+    const loader2 = new THREE.FBXLoader();
     const player = this;
 
     loader.load(`${game.assetsPath}fbx/people/${model}.fbx`, function (object) {
@@ -1033,7 +1021,7 @@ class Player {
       });
 
       const textureLoader = new THREE.TextureLoader();
-
+      setTimeout(() => {}, 2000);
       textureLoader.load(
         `${game.assetsPath}images/SimplePeople_${model}_${colour}.png`,
         function (texture) {
