@@ -150,18 +150,18 @@ class Game {
     document.getElementById("target").onclick = function () {
       game.switchCamera();
     };
-    fetch("http://jsonplaceholder.typicode.com/photos")
+    fetch("https://jsonplaceholder.typicode.com/photos")
       .then((res) => res.json())
       .then((data) => {
         this.imagesMarket.push(...data);
       });
-    fetch("http://jsonplaceholder.typicode.com/photos")
+    fetch("https://jsonplaceholder.typicode.com/photos")
       .then((res) => res.json())
       .then((data) => {
         this.imagesStadium.push(...data);
       });
 
-    fetch("http://jsonplaceholder.typicode.com/photos")
+    fetch("https://jsonplaceholder.typicode.com/photos")
       .then((res) => res.json())
       .then((data) => {
         this.imagesPost.push(...data);
