@@ -1209,7 +1209,7 @@ class PlayerLocal extends Player {
     if (!blocked) {
       if (this.motion.forward > 0) {
         const speed = this.action == "Running" ? 500 : 150;
-        this.object.translateZ(dt * speed);
+        this.object.translateZ(dt * 150);
       } else {
         this.object.translateZ(-dt * 30);
       }
