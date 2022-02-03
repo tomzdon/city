@@ -41,10 +41,10 @@ io.sockets.on('connection', function(socket){
 		socket.userData.action = data.action;
 	});
 	
-	// socket.on('chat message', function(data){
-	// 	console.log(`chat message:${data.id} ${data.message}`);
-	// 	io.to(data.id).emit('chat message', { id: socket.id, message: data.message });
-	// })
+	socket.on('chat message', function(data){
+		console.log(`chat message:${data.id} ${data.message}`);
+		io.to(data.id).emit('chat message', { id: socket.id, message: data.message });
+	})
 });
 
 http.listen(process.env.PORT || 5000, function(){

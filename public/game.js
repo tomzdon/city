@@ -297,7 +297,7 @@ class Game {
     }, 2000);
 
     this.speechBubble = new SpeechBubble(this, "", 150);
-    this.speechBubble.mesh.position.set(0, 350, 0);
+    this.speechBubble.mesh.position.set(0, 50, 0);
 
     this.joystick = new JoyStick({
       onMove: this.playerControl,
@@ -317,13 +317,13 @@ class Game {
         false
       );
     } else {
-      window.addEventListener(
+      this.container.addEventListener(
         "mousedown",
         (event) => game.onMouseDown(event),
         false
       );
     }
-    window.addEventListener("mousedown", this.onMouseMove, false);
+    this.container.addEventListener("mousedown", this.onMouseMove, false);
     window.addEventListener("resize", () => game.onWindowResize(), false);
   }
 
@@ -679,7 +679,7 @@ class Game {
     back.position.set(0, 1100, -1850);
     back.parent = this.player.object;
     const chat = new THREE.Object3D();
-    chat.position.set(0, 200, -450);
+    chat.position.set(0, 600, -950);
     chat.parent = this.player.object;
     const wide = new THREE.Object3D();
     wide.position.set(178, 139, 1665);
@@ -1150,14 +1150,15 @@ class PlayerLocal extends Player {
       game.activeCamera = game.cameras.chat;
       game.speechBubble.update(data.message);
     });
-    // $("#msg-form").submit(function (e) {
-    //   socket.emit("chat message", {
-    //     id: game.chatSocketId,
-    //     message: $("#m").val(),
-    //   });
-    //   $("#m").val("");
-    //   return false;
-    // });
+
+    $("#msg-form").submit(function (e) {
+      socket.emit("chat message", {
+        id: game.chatSocketId,
+        message: $("#m").val(),
+      });
+      $("#m").val("");
+      return false;
+    });
 
     this.socket = socket;
   }
@@ -1390,7 +1391,7 @@ class SpeechBubble {
     if (this.mesh !== undefined && this.player !== undefined) {
       this.mesh.position.set(
         this.player.object.position.x,
-        this.player.object.position.y + 380,
+        this.player.object.position.y + 180,
         this.player.object.position.z
       );
       this.mesh.lookAt(pos);
