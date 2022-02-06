@@ -75,18 +75,17 @@
   </head>
 
   <body>
-    <section class="make-center">
-      <input
-        type="text"
-        id="room-id"
-        value="abcdef"
-        autocorrect="off"
-        autocapitalize="off"
-        size="20"
-      />
-      <button id="open-room">Open Room</button>
-      <button id="join-room">Join Room</button>
-      <button id="open-or-join-room">Auto Open Or Join Room</button>
+    <section class="make-center" style="position: absolute;">
+
+      <button style="display: none" open-room">Open Room</button>
+      <button style="display: none" id="join-room">Join Room</button>
+      <button style="display: none;    height: 50px;
+      width: 150px;
+      background: aquamarine;
+      box-shadow: none;
+      border: 1px solid black;
+      font-size: 17px;
+      font-weight: bold;" id="open-or-join-room">Open Audio Chat </button>
 
       <div
         id="room-urls"
@@ -112,7 +111,9 @@
         right: 0;
         bottom: 0px;
       "
-    ></div>
+    >
+    
+  </div>
     <div id="message">
       <p id="message_text"></p>
       <button id="message_ok">OK</button>
@@ -233,9 +234,7 @@
 
       function disableInputButtons() {
         document.getElementById("open-or-join-room").disabled = true;
-        document.getElementById("open-room").disabled = true;
         document.getElementById("join-room").disabled = true;
-        document.getElementById("room-id").disabled = true;
       }
 
       // ......................................................
@@ -283,17 +282,12 @@
       })();
 
       var roomid = "";
-      console.log("266", connection.socketMessageEvent);
       if (localStorage.getItem(connection.socketMessageEvent)) {
         roomid = localStorage.getItem(connection.socketMessageEvent);
       } else {
         roomid = connection.token();
       }
-      console.log("272", roomid);
-      document.getElementById("room-id").value = roomid;
-      document.getElementById("room-id").onkeyup = function () {
-        localStorage.setItem(connection.socketMessageEvent, this.value);
-      };
+    
 
       var hashString = location.hash.replace("#", "");
       if (hashString.length && hashString.indexOf("comment-") == 0) {
@@ -304,10 +298,8 @@
       if (!roomid && hashString.length) {
         roomid = hashString;
       }
-      console.log("284", roomid);
 
       if (roomid && roomid.length) {
-        document.getElementById("room-id").value = roomid;
         localStorage.setItem(connection.socketMessageEvent, roomid);
 
         // auto-join-room
@@ -322,9 +314,7 @@
           });
         })();
 
-        disableInputButtons();
       }
-      console.log("307", roomid);
     </script>
   </body>
 </html>

@@ -797,6 +797,7 @@ class Game {
 
     const intersects = raycaster.intersectObjects(this.remoteColliders);
     const chat = document.getElementById("chat");
+    const audioChat = document.getElementById("open-or-join-room");
 
     if (intersects.length > 0) {
       const object = intersects[0].object;
@@ -813,6 +814,7 @@ class Game {
         this.scene.add(this.speechBubble.mesh);
         this.chatSocketId = player.id;
         chat.style.bottom = "0px";
+        audioChat.style.display = 'block'
         this.activeCamera = this.cameras.chat;
       }
     } else {
@@ -827,6 +829,8 @@ class Game {
         delete this.speechBubble.player;
         delete this.chatSocketId;
         chat.style.bottom = "-50px";
+        audioChat.style.display = 'none'
+        
         this.activeCamera = this.cameras.back;
       } else {
         console.log("onMouseDown: typing");
