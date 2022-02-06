@@ -1117,6 +1117,7 @@ class PlayerLocal extends Player {
     const socket = io();
     socket.on("setId", function (data) {
       player.id = data.id;
+      sessionStorage.setItem("userId", data.id);
     });
     socket.on("remoteData", function (data) {
       game.remoteData = data;
@@ -1151,12 +1152,25 @@ class PlayerLocal extends Player {
       game.speechBubble.update(data.message);
     });
 
+    socket.on("chat voice", function (data) {
+      const player = game.getRemotePlayerById(data.id);
+      sessionStorage.setItem("userIdJoin", data.id);
+      $('#join-room').click();
+    });
+
     $("#msg-form").submit(function (e) {
       socket.emit("chat message", {
         id: game.chatSocketId,
         message: $("#m").val(),
       });
       $("#m").val("");
+      return false;
+    });
+
+    $("#open-or-join-room").click(function (e) {
+      socket.emit("chat voice", {
+        id: game.chatSocketId,
+      });
       return false;
     });
 
