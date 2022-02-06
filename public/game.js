@@ -137,6 +137,7 @@ class Game {
     this.positionStadium = {};
     this.positionPost = {};
     this.positionMarket = {};
+    this.viewSmallMapCamera = undefined
 
     this.remotePlayers = [];
     this.remoteColliders = [];
@@ -216,7 +217,7 @@ class Game {
   }
 
   switchCamera() {
-    this.viewSmallMap = false;
+    this.viewSmallMap = !this.viewSmallMap;
   }
 
   initSfx() {
@@ -560,37 +561,19 @@ class Game {
 
   onMouseMove(e) {
     e.preventDefault();
+    if(this.viewSmallMapCamera == undefined){
+      return;
+    }
     console.log("jestem");
     var raycaster = new THREE.Raycaster(); // create once
     var mouse = new THREE.Vector2(); // create once
-    let containerWidth = window.innerWidth;
-    let containerHeight = window.innerHeight;
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    var vector = new THREE.Vector3(mouse.x, mouse.y, 1);
-    let camera2 = new THREE.PerspectiveCamera(
-      70,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      92900
-    );
-    this.scene.add(camera2);
-    camera2.position.set(-2180, 6650, 19690);
-    camera2.parent = this.scene;
-    let camera = new THREE.PerspectiveCamera(
-      70,
-      containerWidth / containerHeight,
-      1,
-      100000
-    );
-    camera.position.set(-2180, 6650, 19690);
-    camera.lookAt(this.scene.position);
+    mouse.x = (e.clientX / this.renderer.domElement.width) * 2 - 1;
+    mouse.y = -(e.clientY / this.renderer.domElement.height) * 2 + 1;
 
-    var raycaster = new THREE.Raycaster(); // create once
-    raycaster.setFromCamera(mouse, camera);
-    console.log(this.clicable);
-    var intersects = raycaster.intersectObjects(this.clicable, true); // Circle element which you want to identify
 
+    var raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, this.viewSmallMapCamera);
+    var intersects = raycaster.intersectObjects(this.clicable, true);
     if (intersects.length > 0) {
       console.log("kliklem", intersects[0].object.name);
       console.log("kliklem1", this.positionStadium, this.scene);
@@ -716,8 +699,22 @@ class Game {
 
   onWindowResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
 
+    this.camera.updateProjectionMatrix();
+    let map = document.getElementById("mapa");
+    let tar = document.getElementById("target");
+
+    if (window.innerWidth < 500) {
+      tar.style.width = "100px";
+      tar.style.height = "50px";
+      map.style.height = "50px";
+      map.style.width = "100px";
+    } else {
+      tar.style.width = "200px";
+      tar.style.height = "100px";
+      map.style.height = "100px";
+      map.style.width = "200px";
+    }
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
@@ -814,7 +811,7 @@ class Game {
         this.scene.add(this.speechBubble.mesh);
         this.chatSocketId = player.id;
         chat.style.bottom = "0px";
-        audioChat.style.display = 'block'
+        audioChat.style.display = "block";
         this.activeCamera = this.cameras.chat;
       }
     } else {
@@ -829,8 +826,8 @@ class Game {
         delete this.speechBubble.player;
         delete this.chatSocketId;
         chat.style.bottom = "-50px";
-        audioChat.style.display = 'none'
-        
+        audioChat.style.display = "none";
+
         this.activeCamera = this.cameras.back;
       } else {
         console.log("onMouseDown: typing");
@@ -936,13 +933,19 @@ class Game {
     } else {
       let camera2 = new THREE.PerspectiveCamera(
         70,
-        window.innerWidth / window.innerHeight,
+        this.camera.aspect,
         0.1,
         92900
       );
+      const w = 1520;
+      const h = 1080;
+      const fullWidth = w * 3;
+      const fullHeight = h * 2;
       this.scene.add(camera2);
       camera2.position.set(-2180, 6650, 19690);
       camera2.parent = this.scene;
+      camera2.setViewOffset(fullWidth, fullHeight, w * 1, h * 1, w, h);
+      this.viewSmallMapCamera = camera2;
       this.renderer.render(this.scene, camera2);
     }
 
@@ -976,7 +979,7 @@ class Game {
 
     mapCamera.updateProjectionMatrix();
     if (this.viewSmallMap) {
-      this.renderer.render(this.scene, camera1, false);
+      // this.renderer.render(this.scene, camera1, false);
     }
   }
 }
@@ -1159,7 +1162,7 @@ class PlayerLocal extends Player {
     socket.on("chat voice", function (data) {
       const player = game.getRemotePlayerById(data.id);
       sessionStorage.setItem("userIdJoin", data.id);
-      $('#join-room').click();
+      $("#join-room").click();
     });
 
     $("#msg-form").submit(function (e) {
