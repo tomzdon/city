@@ -330,7 +330,11 @@ class Game {
         false
       );
     }
-    this.container.addEventListener("mousedown", this.onMouseMove, false);
+    if ("ontouchstart" in window) {
+      this.container.addEventListener("touchstart", this.onMouseMove, false);
+    } else {
+      this.container.addEventListener("mousedown", this.onMouseMove, false);
+    }
     window.addEventListener("resize", () => game.onWindowResize(), false);
   }
 
@@ -709,7 +713,6 @@ class Game {
     let map = document.getElementById("mapa");
     let tar = document.getElementById("target");
     let logo = document.getElementById("logo");
-
 
     if (window.innerWidth < 500) {
       tar.style.width = "100px";
