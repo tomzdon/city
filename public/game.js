@@ -137,7 +137,7 @@ class Game {
     this.positionStadium = {};
     this.positionPost = {};
     this.positionMarket = {};
-    this.viewSmallMapCamera = undefined
+    this.viewSmallMapCamera = undefined;
 
     this.remotePlayers = [];
     this.remoteColliders = [];
@@ -148,9 +148,14 @@ class Game {
       text: ["Welcome to Blockland", "GOOD LUCK!"],
       index: 0,
     };
+
     document.getElementById("target").onclick = function () {
       game.switchCamera();
     };
+    $("#target").on("click touchstart", function () {
+      game.switchCamera();
+    });
+
     fetch("https://jsonplaceholder.typicode.com/photos")
       .then((res) => res.json())
       .then((data) => {
@@ -200,7 +205,6 @@ class Game {
     };
 
     this.anims.forEach(function (anim) {
-      console.log(anim);
       options.assets.push(`${game.assetsPath}fbx/anims/${anim}.fbx`);
     });
     options.assets.push(`${game.assetsPath}fbx/town.fbx`);
@@ -561,7 +565,7 @@ class Game {
 
   onMouseMove(e) {
     e.preventDefault();
-    if(this.viewSmallMapCamera == undefined){
+    if (this.viewSmallMapCamera == undefined) {
       return;
     }
     console.log("jestem");
@@ -569,7 +573,6 @@ class Game {
     var mouse = new THREE.Vector2(); // create once
     mouse.x = (e.clientX / this.renderer.domElement.width) * 2 - 1;
     mouse.y = -(e.clientY / this.renderer.domElement.height) * 2 + 1;
-
 
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, this.viewSmallMapCamera);
