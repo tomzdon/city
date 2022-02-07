@@ -148,13 +148,15 @@ class Game {
       text: ["Welcome to Blockland", "GOOD LUCK!"],
       index: 0,
     };
-
-    document.getElementById("target").onclick = function () {
-      game.switchCamera();
-    };
-    $("#target").on("click touchstart", function () {
-      game.switchCamera();
-    });
+    if ("ontouchstart" in window) {
+      $("#target").on("click touchstart", function () {
+        game.switchCamera();
+      });
+    } else {
+      document.getElementById("target").onclick = function () {
+        game.switchCamera();
+      };
+    }
 
     fetch("https://jsonplaceholder.typicode.com/photos")
       .then((res) => res.json())

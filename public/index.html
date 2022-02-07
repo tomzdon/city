@@ -153,7 +153,20 @@
     <script src="game.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
- 
+        let map = document.getElementById("mapa");
+         let tar = document.getElementById("target");
+
+        if (window.innerWidth < 500) {
+          tar.style.width = "100px";
+          tar.style.height = "50px";
+          map.style.height = "50px";
+          map.style.width = "100px";
+        } else {
+          tar.style.width = "200px";
+          tar.style.height = "100px";
+          map.style.height = "100px";
+          map.style.width = "200px";
+        }
         const game = new Game();
         window.game = game; //For debugging only
         
