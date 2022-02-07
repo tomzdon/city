@@ -51,7 +51,7 @@
         position: absolute;
         width: 100%;
         height: 40px;
-        bottom: -40px;
+        display: none;
         transition: all 0.5s;
       }
       form {
@@ -69,6 +69,11 @@
         background: rgb(130, 224, 255);
         border: none;
         padding: 10px;
+      }
+      .logo {
+        position: absolute;
+        top: 50px;
+        right: 40px;
       }
       @media only screen and (max-width: 600px) {
         .mapa {
@@ -115,6 +120,7 @@
 
       <div id="audios-container"></div>
     </section>
+   <a href="https://web3.superfun.social.com" target="_blank"> <img id="logo" src="logo.png" class="logo" /></a>
     <div
       id="target"
       style="
@@ -155,9 +161,12 @@
       document.addEventListener("DOMContentLoaded", function () {
         let map = document.getElementById("mapa");
          let tar = document.getElementById("target");
+         let logo = document.getElementById("logo");
 
         if (window.innerWidth < 500) {
           tar.style.width = "100px";
+          logo.style.width = "100px";
+          logo.style.height = "50px";
           tar.style.height = "50px";
           map.style.height = "50px";
           map.style.width = "100px";
@@ -166,6 +175,8 @@
           tar.style.height = "100px";
           map.style.height = "100px";
           map.style.width = "200px";
+          logo.style.width = "280px";
+          logo.style.height = "80px";
         }
         const game = new Game();
         window.game = game; //For debugging only

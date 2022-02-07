@@ -708,17 +708,23 @@ class Game {
     this.camera.updateProjectionMatrix();
     let map = document.getElementById("mapa");
     let tar = document.getElementById("target");
+    let logo = document.getElementById("logo");
+
 
     if (window.innerWidth < 500) {
       tar.style.width = "100px";
       tar.style.height = "50px";
       map.style.height = "50px";
       map.style.width = "100px";
+      logo.style.width = "100px";
+      logo.style.height = "50px";
     } else {
       tar.style.width = "200px";
       tar.style.height = "100px";
       map.style.height = "100px";
       map.style.width = "200px";
+      logo.style.width = "280px";
+      logo.style.height = "80px";
     }
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
@@ -815,14 +821,21 @@ class Game {
         this.speechBubble.update("");
         this.scene.add(this.speechBubble.mesh);
         this.chatSocketId = player.id;
-        chat.style.bottom = "0px";
+        if (window.innerWidth < 500) {
+          chat.style.top = "200px";
+          chat.style.left = "0px";
+          chat.style.display = "block";
+        } else {
+          chat.style.bottom = "0px";
+          chat.style.display = "block";
+        }
         audioChat.style.display = "block";
         this.activeCamera = this.cameras.chat;
       }
     } else {
       //Is the chat panel visible?
       if (
-        chat.style.bottom == "0px" &&
+        chat.style.display == "block" &&
         window.innerHeight - event.clientY > 40
       ) {
         console.log("onMouseDown: No player found");
@@ -830,6 +843,7 @@ class Game {
           this.speechBubble.mesh.parent.remove(this.speechBubble.mesh);
         delete this.speechBubble.player;
         delete this.chatSocketId;
+        chat.style.display = "none";
         chat.style.bottom = "-50px";
         audioChat.style.display = "none";
 
