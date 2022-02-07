@@ -331,7 +331,7 @@ class Game {
       );
     }
     if ("ontouchstart" in window) {
-      this.container.addEventListener("touchstart", this.onMouseMove, false);
+      this.container.addEventListener("touchdown", this.onMouseMove, false);
     } else {
       this.container.addEventListener("mousedown", this.onMouseMove, false);
     }
