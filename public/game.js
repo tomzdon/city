@@ -403,7 +403,7 @@ class Game {
             game.clicable.push(child);
             game.speechPost++;
             gltf.scene.name = "stadium";
-          } else if (child.name == "speech_shop") {
+          } else if (child.name === "speech_shop") {
             child.visible = false;
             game.speechPost++;
           }

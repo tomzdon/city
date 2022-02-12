@@ -93,7 +93,7 @@ io.sockets.on("connection", function (socket) {
 
 RTCMultiConnectionServer.beforeHttpListen(http, config);
 http = http.listen(
-  process.env.PORT || 5000,
+  process.env.PORT || 5001,
   process.env.IP || "0.0.0.0",
   function () {
     RTCMultiConnectionServer.afterHttpListen(http, config);
@@ -121,4 +121,4 @@ setInterval(function () {
     }
   }
   if (pack.length > 0) io.emit("remoteData", pack);
-}, 40);
+}, 1);
