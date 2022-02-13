@@ -470,21 +470,19 @@ class JoyStick {
     const joystick = this;
     let chat = document.getElementById("chat");
     body.onkeydown = function (evt) {
+      evt.preventDefault();
       joystick.tap(evt);
       evt.stopPropagation();
     };
+
     if (this.domElement != undefined) {
       if ("ontouchstart" in window) {
         this.domElement.addEventListener("touchstart", function (evt) {
-          evt.preventDefault();
           joystick.tap(evt);
-          evt.stopPropagation();
         });
       } else {
         this.domElement.addEventListener("mousedown", function (evt) {
-          evt.preventDefault();
           joystick.tap(evt);
-          evt.stopPropagation();
         });
       }
     }
@@ -515,21 +513,21 @@ class JoyStick {
     }
     if ("ontouchstart" in window) {
       document.ontouchmove = function (evt) {
-        evt.preventDefault();
         joystick.move(evt);
       };
       document.ontouchend = function (evt) {
-        evt.preventDefault();
         joystick.up(evt);
       };
     } else {
       document.onmousemove = function (evt) {
         evt.preventDefault();
         joystick.move(evt);
+        evt.stopPropagation();
       };
       document.onmouseup = function (evt) {
         evt.preventDefault();
         joystick.up(evt);
+        evt.stopPropagation();
       };
     }
   }

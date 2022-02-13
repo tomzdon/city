@@ -148,15 +148,16 @@ class Game {
       text: ["Welcome to Blockland", "GOOD LUCK!"],
       index: 0,
     };
-    if ("ontouchstart" in window) {
-      $("#target").on("click touchstart", function () {
-        game.switchCamera();
-      });
-    } else {
-      document.getElementById("target").onclick = function () {
-        game.switchCamera();
-      };
-    }
+    // if ("ontouchstart" in window) {
+    //   $("#target").on("click touchstart", function () {
+    //     game.switchCamera();
+    //   });
+    // } else {
+    // }
+    document.getElementById("target").onclick = function () {
+      game.switchCamera();
+    };
+
 
     fetch("https://jsonplaceholder.typicode.com/photos")
       .then((res) => res.json())
@@ -298,10 +299,8 @@ class Game {
     const loaderGLTF = new THREE.GLTFLoader();
     const game = this;
     this.player = new PlayerLocal(this);
-    setTimeout(() => {
       cluster.forEach((cls) => game.loadCluster(cls));
       game.loadCars({ x: 1, z: 0, cluster: "cars" });
-    }, 2000);
 
     this.speechBubble = new SpeechBubble(this, "", 150);
     this.speechBubble.mesh.position.set(0, 50, 0);
@@ -311,6 +310,7 @@ class Game {
       game: this,
     });
 
+
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -318,23 +318,28 @@ class Game {
     this.container.appendChild(this.renderer.domElement);
 
     if ("ontouchstart" in window) {
-      window.addEventListener(
-        "touchdown",
-        (event) => game.onMouseDown(event),
-        false
-      );
+      this.container.addEventListener("touchstart", this.onMouseMove, false);
     } else {
-      this.container.addEventListener(
-        "mousedown",
-        (event) => game.onMouseDown(event),
-        false
-      );
-    }
-    if ("ontouchstart" in window) {
-      this.container.addEventListener("click touchstart", this.onMouseMove, false);
-    } else {
+
       this.container.addEventListener("mousedown", this.onMouseMove, false);
     }
+
+
+    if ("ontouchstart" in window) {
+      this.container.addEventListener(
+          "touchstart",
+          (event) => game.onMouseDown(event),
+          false
+      );
+    } else {
+
+      this.container.addEventListener(
+          "mousedown",
+          (event) => game.onMouseDown(event),
+          false
+      );
+    }
+
     window.addEventListener("resize", () => game.onWindowResize(), false);
   }
 
@@ -574,11 +579,15 @@ class Game {
     if (this.viewSmallMapCamera == undefined) {
       return;
     }
-    console.log("jestem");
     var raycaster = new THREE.Raycaster(); // create once
     var mouse = new THREE.Vector2(); // create once
-    mouse.x = (e.clientX / this.renderer.domElement.width) * 2 - 1;
-    mouse.y = -(e.clientY / this.renderer.domElement.height) * 2 + 1;
+    if (e.touches != undefined){
+      mouse.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+    } else {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    }
 
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, this.viewSmallMapCamera);
@@ -613,7 +622,6 @@ class Game {
           }
         });
       }
-
       this.viewSmallMap = true;
     }
   }
@@ -800,8 +808,13 @@ class Game {
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
     const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / this.renderer.domElement.width) * 2 - 1;
-    mouse.y = -(event.clientY / this.renderer.domElement.height) * 2 + 1;
+    if (event.touches != undefined){
+      mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+    } else {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
 
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, this.camera);
@@ -1050,7 +1063,6 @@ class Player {
       });
 
       const textureLoader = new THREE.TextureLoader();
-      setTimeout(() => {}, 2000);
       textureLoader.load(
         `${game.assetsPath}images/SimplePeople_${model}_${colour}.png`,
         function (texture) {
